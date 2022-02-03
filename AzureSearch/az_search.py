@@ -64,6 +64,23 @@ class AzSearchClient:
             data_source_name=datasource_name,
             target_index_name=index_name
         )
-        
+
         result = indexers_client.create_indexer(indexer)
         print("Create new Indexer - sample-indexer")
+
+    def run_indexer(self, indexer_name):
+        indexers_client = SearchIndexerClient(self.endpoint, AzureKeyCredential(self.api_key))
+        indexers_client.run_indexer(indexer_name)
+
+    def get_indexer_status(self, indexer_name):
+        indexers_client = SearchIndexerClient(self.endpoint, AzureKeyCredential(self.api_key))
+        return indexers_client.get_indexer_status(indexer_name)
+
+class AzSearchQuery:
+    def __init__(self, service_name, index_name, api_key):
+        endpoint = "https://{}.search.windows.net/".format(service_name)
+        credential = AzureKeyCredential(api_key)
+        self.client = SearchClient(endpoint=endpoint,
+                      index_name=index_name,
+                      credential=credential)
+    
